@@ -10,13 +10,7 @@ public class Main {
         String[][] gameBoard = {    {" "," "," "," "," "," "," "," "},
                                     {" "," "," "," "," "," "," "," "},
                                     {" "," "," "," "," "," "," "," "}   };
-        try{
-            game(gameBoard);
-        }
-        catch (Exception e){
-            System.out.println("lol");
-        }
-
+        game(gameBoard);
     }
     public static void printBoard(String[][] gameBoard){
         System.out.println("-------------------------------------------------");
@@ -31,7 +25,7 @@ public class Main {
         }
     }
 
-    public static void round(String player, int posX, int posY, String[][] gameBoard) throws Exception{
+    public static void round(String player, int posX, int posY, String[][] gameBoard){
         String symbol ="X";
         if (player.equals("player")){
             symbol = "X";
@@ -41,40 +35,31 @@ public class Main {
         if (gameBoard[posX][posY].equals(" ")){
             gameBoard[posX][posY] = symbol;
         }
-        else {
-            throw new Exception();
-        }
-        }
+    }
 
 
 
-    public static void pickPos(String player, String[][] gameBoard) throws Exception {
+    public static void pickPos(String player, String[][] gameBoard){
         printBoard(gameBoard);
         if (player.equals("player")) {
             Scanner xScanner = new Scanner(System.in);
 
-            System.out.println("Enter X cordinate: ");
+            System.out.println("Enter Y coordinate: ");
             // String input
-            int posX = xScanner.nextInt() - 1;
+            int posY = xScanner.nextInt() - 1;
             Scanner yScanner = new Scanner(System.in);
-            System.out.println("Enter Y cordinate: ");
+            System.out.println("Enter X coordinate: ");
             // String input
-            int posY = yScanner.nextInt() - 1;
-            try
-            {
+            int posX = yScanner.nextInt() - 1;
+
                 //statements that may cause an exception
                 round(player, posX, posY, gameBoard);
-            }
-            catch (Exception e)‏
-            {
-                //error handling code
-                System.out.println("Invalid position");
 
-            }
+                //error handling code
 
         }else{
-            int posX = (int)(Math.random() * ((2 - 0) + 1)) + 0;
-            int posY = (int)(Math.random() * ((7 - 0) + 1)) + 0;
+            int posX = (int) (Math.random() * ((2) + 1));
+            int posY = (int) (Math.random() * ((7) + 1));
             round("cpu", posX, posY, gameBoard);
         }
 
@@ -82,16 +67,22 @@ public class Main {
 
     public static int getWinCon(){
         Scanner winConScanner = new Scanner(System.in);
-
-        System.out.println("Enter the number of symbols need to win: ");
-        // String input
-        return winConScanner.nextInt();
+        int res = 0;
+        while (true){
+            System.out.println("Enter the number of symbols need to win(must been between 2-9): ");
+             res = winConScanner.nextInt();
+           if (res > 8 || res <  3) {
+               System.out.println("wrong number!");
+               continue;
+           }
+           return res;
+        }
     }
 
-    public static void game(String[][] gameBoard) throws Exception{
+    public static void game(String[][] gameBoard){
         int winCon = getWinCon();
         String player = "player";
-        String winnigPlayer = "Error, String 'winningPlayer' didnt get the correct value";
+        String winnigPlayer = "Error, String 'winningPlayer' didn't get the correct value";
         int round = 1;
         while(true){
             if (!checkWin(gameBoard, winCon).equals("Draw")){
@@ -127,7 +118,6 @@ public class Main {
                     if (countO >= winNum){
                         return "O";
                     }
-                    continue;
                 } else{
                     countO = 0;
                 }
