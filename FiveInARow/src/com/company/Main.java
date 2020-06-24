@@ -1,5 +1,7 @@
 package com.company;
+import javax.management.openmbean.InvalidKeyException;
 import javax.management.openmbean.InvalidOpenTypeException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 //kell a win check, mennyit engedjen meg a validaciok
@@ -42,21 +44,28 @@ public class Main {
     public static void pickPos(String player, String[][] gameBoard){
         printBoard(gameBoard);
         if (player.equals("player")) {
-            Scanner xScanner = new Scanner(System.in);
+                while (true){
+                    try {
+                        Scanner xScanner = new Scanner(System.in);
 
-            System.out.println("Enter Y coordinate: ");
-            // String input
-            int posY = xScanner.nextInt() - 1;
-            Scanner yScanner = new Scanner(System.in);
-            System.out.println("Enter X coordinate: ");
-            // String input
-            int posX = yScanner.nextInt() - 1;
-
-                //statements that may cause an exception
-                round(player, posX, posY, gameBoard);
-
-                //error handling code
-
+                        System.out.println("Enter Y coordinate: ");
+                        // String input
+                        int posY = xScanner.nextInt() - 1;
+                        Scanner yScanner = new Scanner(System.in);
+                        System.out.println("Enter X coordinate: ");
+                        // String input
+                        int posX = yScanner.nextInt() - 1;
+                        //statements that may cause an exception
+                        round(player, posX, posY, gameBoard);
+                        break;
+                    } catch (ArrayIndexOutOfBoundsException err){
+                        System.out.println("Invalid coordinate, please try again.");
+                        continue;
+                    } catch (InputMismatchException ie){
+                        System.out.println("Invalid coordinate, please try again.");
+                        continue;
+                    }
+                }
         }else{
             int posX = (int) (Math.random() * ((2) + 1));
             int posY = (int) (Math.random() * ((7) + 1));
@@ -65,22 +74,29 @@ public class Main {
 
     }
 
-    public static int getWinCon(){
+    public static int getWinCon() throws Exception {
         Scanner winConScanner = new Scanner(System.in);
         int res = 0;
-        while (true){
-            System.out.println("Enter the number of symbols need to win(must been between 2-9): ");
-             res = winConScanner.nextInt();
-           if (res > 8 || res <  3) {
-               System.out.println("wrong number!");
-               continue;
-           }
-           return res;
+        System.out.println("Enter the number of symbols need to win(must been between 2-9): ");
+        res = winConScanner.nextInt();
+        if (res > 8 || res <  3) {
+            throw new Exception();
         }
+           return res;
     }
 
     public static void game(String[][] gameBoard){
-        int winCon = getWinCon();
+        int winCon = 0;
+        while (true) {
+            try {
+                winCon = getWinCon();
+                break;
+            } catch (Exception e) {
+                System.out.println("wrong number!");
+                continue;
+            }
+        }
+
         String player = "player";
         String winnigPlayer = "Error, String 'winningPlayer' didn't get the correct value";
         int round = 1;
