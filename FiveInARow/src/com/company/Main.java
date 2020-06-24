@@ -27,7 +27,7 @@ public class Main {
         }
     }
 
-    public static void round(String player, int posX, int posY, String[][] gameBoard){
+    public static void round(String player, int posX, int posY, String[][] gameBoard) throws Exception {
         String symbol ="X";
         if (player.equals("player")){
             symbol = "X";
@@ -36,6 +36,8 @@ public class Main {
         }
         if (gameBoard[posX][posY].equals(" ")){
             gameBoard[posX][posY] = symbol;
+        } else {
+            throw new Exception();
         }
     }
 
@@ -64,12 +66,23 @@ public class Main {
                     } catch (InputMismatchException ie){
                         System.out.println("Invalid coordinate, please try again.");
                         continue;
+                    } catch (Exception e) {
+                        System.out.println("Spot already taken, please try again.");
+                        continue;
                     }
                 }
         }else{
-            int posX = (int) (Math.random() * ((2) + 1));
-            int posY = (int) (Math.random() * ((7) + 1));
-            round("cpu", posX, posY, gameBoard);
+            while (true){
+                try {
+                    int posX = (int) (Math.random() * ((2) + 1));
+                    int posY = (int) (Math.random() * ((7) + 1));
+                    round("cpu", posX, posY, gameBoard);
+                    break;
+                } catch (Exception e){
+                    continue;
+                }
+            }
+
         }
 
     }
